@@ -1,5 +1,7 @@
 //import {HOSTURL} from "./src/app/env";
 //var HOSTURL = require('./src/app/env');
+var friends = require('./routes/friends.routes');
+
 
 var express = require('express');
 const session = require('express-session');
@@ -40,7 +42,7 @@ app.use(session({
   saveUninitialized: true,
   store: new FileStore(),
   resave: false,
-  cookie : {secure: false, maxAge: 864000000, httpOnly: false },
+  cookie : {secure: false, maxAge: 60 * 60 * 24, httpOnly: false },
 }));
 
 app.use(function(req, res, next){
@@ -233,7 +235,7 @@ app.get("/api/getUsers", function(req, res){
   });
 });
 
-app.get("/api/getFriends", function(req, res){
+/*app.get("/api/getFriends", function(req, res){
   User.findOne({username: req.user.username}).exec((err, user) =>{
     if(err){
       return res.send({status: '500', 'errorMsg': "Internal Server Error"});
@@ -243,7 +245,9 @@ app.get("/api/getFriends", function(req, res){
       return res.send({status: '200', friends: user.friends.reverse()});
     }
   });
-});
+});*/
+
+app.use('/api/friends', friends);
 
 app.post("/api/addFriend", function(req, res){
   User.findOne({username: req.user.username}).exec((err, user) =>{
